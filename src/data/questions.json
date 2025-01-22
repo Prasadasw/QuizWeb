@@ -1,0 +1,103 @@
+[
+    {
+      "question": "What is 2 + 2?",
+      "options": ["3", "4", "5", "6"],
+      "answer": "4"
+    },
+    {
+      "question": "What is 5 + 3?",
+      "options": ["7", "8", "9", "10"],
+      "answer": "8"
+    },
+    {
+      "question": "What is 10 - 6?",
+      "options": ["3", "4", "5", "6"],
+      "answer": "4"
+    },
+    {
+      "question": "What is 7 x 2?",
+      "options": ["12", "14", "16", "18"],
+      "answer": "14"
+    },
+    {
+      "question": "What is 12 ÷ 3?",
+      "options": ["3", "4", "5", "6"],
+      "answer": "4"
+    },
+    {
+      "question": "What is 8 + 4?",
+      "options": ["10", "11", "12", "13"],
+      "answer": "12"
+    },
+    {
+      "question": "What is 9 - 3?",
+      "options": ["5", "6", "7", "8"],
+      "answer": "6"
+    },
+    {
+      "question": "What is 6 x 3?",
+      "options": ["15", "16", "17", "18"],
+      "answer": "18"
+    },
+    {
+      "question": "What is 15 ÷ 3?",
+      "options": ["4", "5", "6", "7"],
+      "answer": "5"
+    },
+    {
+      "question": "What is 11 + 5?",
+      "options": ["15", "16", "17", "18"],
+      "answer": "16"
+    },
+    {
+      "question": "What is 13 - 7?",
+      "options": ["5", "6", "7", "8"],
+      "answer": "6"
+    },
+    {
+      "question": "What is 4 x 5?",
+      "options": ["15", "20", "25", "30"],
+      "answer": "20"
+    },
+    {
+      "question": "What is 20 ÷ 4?",
+      "options": ["4", "5", "6", "7"],
+      "answer": "5"
+    },
+    {
+      "question": "What is 3 + 6?",
+      "options": ["8", "9", "10", "11"],
+      "answer": "9"
+    },
+    {
+      "question": "What is 18 - 9?",
+      "options": ["8", "9", "10", "11"],
+      "answer": "9"
+    },
+    {
+      "question": "What is 8 x 2?",
+      "options": ["14", "15", "16", "17"],
+      "answer": "16"
+    },
+    {
+      "question": "What is 24 ÷ 6?",
+      "options": ["3", "4", "5", "6"],
+      "answer": "4"
+    },
+    {
+      "question": "What is 10 + 15?",
+      "options": ["20", "25", "30", "35"],
+      "answer": "25"
+    },
+    {
+      "question": "What is 25 - 10?",
+      "options": ["12", "13", "14", "15"],
+      "answer": "15"
+    },
+    {
+      "question": "What is 5 x 5?",
+      "options": ["20", "25", "30", "35"],
+      "answer": "25"
+    }
+  ]
+  

@@ -4,7 +4,11 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}", // Include all JS/JSX/TS/TSX files in the src directory
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        quicksand: ['Quicksand', 'sans-serif'], // Add Quicksand font
+      },
+    },
   },
   plugins: [],
 };

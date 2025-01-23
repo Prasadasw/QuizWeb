@@ -8,20 +8,21 @@ const App = () => {
   const [startQuiz, setStartQuiz] = useState(false);
 
   return (
-    <div className="min-h-screen bg-blue-100 text-center flex flex-col items-center justify-center">
-      {!playerName ? (
-        <WelcomeScreen onStart={() => setPlayerName("input")} />
-      ) : !startQuiz ? (
-        <PlayerNameInput
-          onNameSubmit={(name) => {
-            setPlayerName(name);
-            setStartQuiz(true);
-          }}
-        />
-      ) : (
-        <QuizScreen playerName={playerName} />
-      )}
-    </div>
+    // <div className="min-h-screen bg-blue-100 text-center flex flex-col items-center justify-center">
+    //   {!playerName ? (
+    //     <WelcomeScreen onStart={() => setPlayerName("input")} />
+    //   ) : !startQuiz ? (
+    //     <PlayerNameInput
+    //       onNameSubmit={(name) => {
+    //         setPlayerName(name);
+    //         setStartQuiz(true);
+    //       }}
+    //     />
+    //   ) : (
+       
+    //   )}
+    // </div>
+     <QuizScreen playerName={playerName} />
   );
 };
 

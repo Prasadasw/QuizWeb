@@ -1,46 +1,55 @@
 [
     {
-      "question": "Example question to be written here?",
-      "options": ["Answer One", "Answer Two", "Answer Three", "Answer Four"],
-      "answer": "4"
+      "question": "Which of the following is not a 3D shape?",
+      "audio": "../assets/audio/firstquestion.mp3",
+      "options": ["cuboid", "Sphere", "Cube", "Rectangle"],
+      "answer": "Rectangle"
     },
     {
-      "question": "What is 5 + 3?",
-      "options": ["7", "8", "9", "10"],
-      "answer": "8"
+      "question": "How many 50 FILS make one Dirham?",
+      "audio": "../assets/audio/secondquestion.mp3",
+      "options": ["2", "3", "4", "5"],
+      "answer": "2"
     },
     {
-      "question": "What is 10 - 6?",
-      "options": ["3", "4", "5", "6"],
-      "answer": "4"
+      "question": "What is the PLACE value of digit 6 in number 3567?",
+      "audio": "../assets/audio/thirdquestion.mp3",
+      "options": ["Hundreds", "Tens", "Ones", "Thousands"],
+      "answer": "Tens"
     },
     {
-      "question": "What is 7 x 2?",
-      "options": ["12", "14", "16", "18"],
-      "answer": "14"
-    },
-    {
-      "question": "What is 12 ÷ 3?",
-      "options": ["3", "4", "5", "6"],
-      "answer": "4"
-    },
-    {
-      "question": "What is 8 + 4?",
-      "options": ["10", "11", "12", "13"],
-      "answer": "12"
-    },
-    {
-      "question": "What is 9 - 3?",
-      "options": ["5", "6", "7", "8"],
-      "answer": "6"
-    },
-    {
-      "question": "What is 6 x 3?",
-      "options": ["15", "16", "17", "18"],
+      "question": "What comes next in a pattern 3,6,9,12,15,……?",
+      "audio": "../assets/audio/fourthquestion.mp3",
+      "options": ["16", "17", "18", "19"],
       "answer": "18"
     },
     {
-      "question": "What is 15 ÷ 3?",
+      "question": "Show a circle divided into 4 equal parts, with 1 part shaded",
+      "audio": "../assets/audio/fivthquestion.mp3",
+      "options": ["1/4", "2/4", "1/4", "3/4"],
+      "answer": "1/4"
+    },
+    {
+      "question": "Which of these number is greater than 25+31 ?",
+      "audio": "../assets/audio/sixthquestion.mp3",
+      "options": ["46", "55", "56", "66"],
+      "answer": "66"
+    },
+    {
+      "question": "What answer will you get if subtract 287 from 335.",
+      "audio": "../assets/audio/secondround1st.mp3",
+      "options": ["48", "47", "38", "58"],
+      "answer": "48"
+    },
+    {
+      "question": "Tom has AED 50. He buys a book for AED 18, a pen for AED 3, and a notebook for AED 7. How much money does Tom have left?",
+      "audio": "../assets/audio/secondround2nd.mp3",
+      "options": ["23", "22", "21", "19"],
+      "answer": "22"
+    },
+    {
+      "question": "During recess, a bunch of children jumped rope. 4 girls joined in, and then 7 boys joined in. Now, there are 23 children jumping the rope. How many children were jumping rope at first?",
+      "audio": "../assets/audio/secondround2nd.mp3",
       "options": ["4", "5", "6", "7"],
       "answer": "5"
     },

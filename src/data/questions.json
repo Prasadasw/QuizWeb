@@ -94,7 +94,7 @@
       "id": 14,
       "question": "Who is known as the “Father of Geometry “? ",
       "audio": "../assets/audio/thirdround2nd.mp3",
-      "options": ["Isaac Newton", "Archimedes", ". Carl Friedrich Gauss", "Euclid"],
+      "options": ["Isaac Newton", "Archimedes", "Carl Friedrich Gauss", "Euclid"],
       "answer": "Euclid"
     },
     {

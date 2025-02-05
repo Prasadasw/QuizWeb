@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import useSound from "use-sound";
 import questions from "../data/questions.json";
 import bgscreen from "../assets/images/frame6.png";
 import boy from "../assets/images/boyquize.png";
@@ -26,9 +27,64 @@ import thirdquestion5 from "../assets/audio/thirdround5th.mp3";
 import thirdquestion6 from "../assets/audio/thirdround6th.mp3";
 import thirdquestion7 from "../assets/audio/thirdround7th.mp3";
 import help from "../assets/gif/help-unscreen.gif";
+import congratulationbg from "../assets/images/pricebg.png";
+import candy from "../assets/gif/candy-1--unscreen.gif";
+import closeIcon from "../assets/images/cross.png";
+import pricepoll from "../assets/images/pricepoll.png";
+import pollbg from "../assets/images/pricepollbg.png";
+import hoverSound from "../assets/audio/5050.mp3";
+import HoverFlip from "../assets/audio/flipquestion.mp3";
+import DoubleDip from "../assets/audio/doubledip.mp3";
 
-const Lifeline = ({ isVisible, onFiftyFiftyClick, onClose }) => {
+const Lifeline = ({
+  isVisible,
+  onFiftyFiftyClick,
+  onClose,
+  onFlipQuestionClick,
+}) => {
+  const [playHoverSound, { stop: stopHoverSound }] = useSound(hoverSound);
+  const [playHoverFlip, { stop: stopHoverFlip }] = useSound(HoverFlip);
+  const [playDoubleDip, { stop: stopDoubleDip }] = useSound(DoubleDip);
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [options, setOptions] = useState(questions[currentQuestion].options);
+  const [lifelinesUsed, setLifelinesUsed] = useState({
+    fiftyFifty: false,
+    flipQuestion: false,
+    blurredOptions: [], // Add this line
+  });
+  // const audioRef = useRef(new Audio(hoverSound, HoverFlip, DoubleDip));
+  // const fiftyFiftyRef = useRef(new Audio(hoverSound));
+  // const flipQuestionRef = useRef(new Audio(HoverFlip));
+  // const doubleDipRef = useRef(new Audio(DoubleDip));
+
+  // const playSound = (audioRef) => {
+  //   audioRef.current.currentTime = 0; // Reset audio to start
+  //   audioRef.current.play();
+  // };
+
   if (!isVisible) return null;
+  const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
+  const handleFiftyFifty = () => {
+    if (lifelinesUsed.fiftyFifty) return;
+
+    const correctAnswer = questions[currentQuestion].answer;
+    const incorrectAnswers = questions[currentQuestion].options.filter(
+      (option) => option !== correctAnswer
+    );
+
+    const shuffledIncorrect = shuffleArray(incorrectAnswers).slice(0, 2);
+
+    const blurredOptions = questions[currentQuestion].options
+      .map((option, index) =>
+        shuffledIncorrect.includes(option) ? index : null
+      )
+      .filter((index) => index !== null);
+
+    setOptions(questions[currentQuestion].options);
+    setLifelinesUsed((prev) => ({ ...prev, fiftyFifty: true, blurredOptions }));
+    onFiftyFiftyClick();
+  };
 
   return (
     <div style={styles.container}>
@@ -49,11 +105,34 @@ const Lifeline = ({ isVisible, onFiftyFiftyClick, onClose }) => {
       </div>
       <div style={styles.header}>LIFELINES</div>
       <div style={styles.buttonsContainer}>
-        <button style={styles.button}>50:50</button>
-        <button style={styles.button}>Double Dip</button>
+        <button
+          onClick={onFiftyFiftyClick}
+          onMouseEnter={playHoverSound}
+          onMouseLeave={stopHoverSound}
+          disabled={false}
+          style={styles.button}
+        >
+          50:50
+        </button>
+        <button
+          style={styles.button}
+          onMouseEnter={playDoubleDip}
+          onMouseLeave={stopDoubleDip}
+          // onMouseEnter={() => playSound(doubleDipRef)}
+        >
+          Double Dip
+        </button>
       </div>
       <div style={styles.buttonsContainer}>
-        <button style={styles.button}>Flip the Question</button>
+        <button
+          onClick={onFlipQuestionClick}
+          disabled={false}
+          style={styles.button}
+          onMouseEnter={playHoverFlip}
+          onMouseLeave={stopHoverFlip}
+        >
+          Flip the Question
+        </button>
       </div>
     </div>
   );
@@ -119,8 +198,23 @@ const QuizScreen = ({ playerName }) => {
   const [isLifelineVisible, setIsLifelineVisible] = useState(false);
   const [round, setRound] = useState(1); // Track the current round
   const [options, setOptions] = useState([]); // State for storing current options
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [lifelinesUsed, setLifelinesUsed] = useState({
+    fiftyFifty: false,
+    flipQuestion: false,
+    blurredOptions: [], // Add this line
+  });
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const audioRef = useRef(null);
+  const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
 
   const questionAudioMap = {
     1: firstQuestionAudio,
@@ -209,23 +303,38 @@ const QuizScreen = ({ playerName }) => {
     }
   }, [currentQuestion]);
 
-  // 50:50 Lifeline handler
-  const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
-
   const handleFiftyFifty = () => {
+    if (lifelinesUsed.fiftyFifty) return;
+
     const correctAnswer = questions[currentQuestion].answer;
     const incorrectAnswers = questions[currentQuestion].options.filter(
       (option) => option !== correctAnswer
     );
-    // Pick one incorrect answer randomly
-    const shuffledIncorrect = shuffleArray(incorrectAnswers).slice(0, 1);
-    // New options: one correct + one incorrect answer
-    const newOptions = [correctAnswer, ...shuffledIncorrect];
-    setOptions(newOptions);
+
+    const shuffledIncorrect = shuffleArray(incorrectAnswers).slice(0, 2);
+
+    const blurredOptions = questions[currentQuestion].options
+      .map((option, index) =>
+        shuffledIncorrect.includes(option) ? index : null
+      )
+      .filter((index) => index !== null);
+
+    setOptions(questions[currentQuestion].options);
+    setLifelinesUsed((prev) => ({ ...prev, fiftyFifty: true, blurredOptions }));
+  };
+  const handleFlipQuestion = () => {
+    if (lifelinesUsed.flipQuestion) return; // Prevent reuse
+
+    setCurrentQuestion((prev) => prev + 1); // Skip question
+    setLifelinesUsed((prev) => ({ ...prev, flipQuestion: true })); // Mark as used
   };
 
   useEffect(() => {
-    setOptions(questions[currentQuestion].options);
+    if (currentQuestion >= questions.length) {
+      setIsGameOver(true);
+    } else {
+      setOptions(questions[currentQuestion].options);
+    }
   }, [currentQuestion]);
 
   const handleAnswerClick = (option) => {
@@ -237,6 +346,12 @@ const QuizScreen = ({ playerName }) => {
 
     setResultGif(isCorrect ? celebration : sad);
 
+    // Increase score if the answer is correct
+    if (isCorrect) {
+      setScore((prev) => prev + 1);
+    }
+
+    // Show correct/wrong popup
     setTimeout(() => {
       setResultModal(
         isCorrect
@@ -245,6 +360,42 @@ const QuizScreen = ({ playerName }) => {
       );
     }, 1000);
   };
+
+  const handleRestart = () => {
+    setCurrentQuestion(0);
+    setScore(0);
+    setSelectedOption(null);
+    setIsGameOver(false);
+  };
+
+  if (isGameOver) {
+    return (
+      <div
+        className="h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative"
+        style={{
+          backgroundImage: `url(${congratulationbg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div>
+          <h1 className="text-4xl font-bold mb-4">
+            🎉 Congratulations {playerName}!
+          </h1>
+          <p className="text-2xl mb-6">
+            You scored <strong>{score}</strong> out of{" "}
+            <strong>{questions.length}</strong>
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-6 py-2 bg-[#704FE6] hover:bg-white hover:text-[#704FE6]  text-white text-xl font-bold rounded-lg shadow-md"
+          >
+            Restart Quiz
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleNextQuestion = () => {
     if (audioRef.current) {
@@ -258,6 +409,13 @@ const QuizScreen = ({ playerName }) => {
     setCurrentQuestion((prev) => prev + 1);
     setPaused(true);
     setIsAudioPlaying(false);
+
+    // Reset timer based on the round
+    if (round === 1) {
+      setTimer(30);
+    } else if (round === 2) {
+      setTimer(60);
+    }
   };
 
   const handleQuit = () => {
@@ -265,7 +423,7 @@ const QuizScreen = ({ playerName }) => {
   };
 
   const confirmQuit = () => {
-    window.location.reload();
+    setIsGameOver(true);
   };
 
   const toggleLifeline = () => {
@@ -340,10 +498,10 @@ const QuizScreen = ({ playerName }) => {
         <div className="flex flex-col lg:flex-row items-start w-full max-w-5xl">
           <div className="w-full lg:w-1/2 flex items-start">
             <div className="flex items-center gap-10">
-              <div className="w-16 h-14 flex items-center justify-center bg-yellow-400 text-black font-bold text-xl rounded-md shadow-md">
+              <div className="flex flex-shrink-0 items-center justify-center w-12 h-12 bg-yellow-400 text-black font-bold text-xl rounded-md shadow-md">
                 {currentQuestion + 1}
               </div>
-              <p className="text-3xl font-bold text-black mt-4">
+              <p className="text-[27px] font-bold text-left text-black mt-4">
                 {current.question}
               </p>
             </div>
@@ -357,21 +515,26 @@ const QuizScreen = ({ playerName }) => {
             />
 
             <div className="w-full flex flex-col items-center">
-              {current.options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerClick(option)}
-                  className={`w-3/4 text-left px-4 py-3 mb-2 text-lg rounded-md border font-bold transition-all flex items-center gap-3 ${
-                    optionColor[option] || "bg-gray-300"
-                  }`}
-                  disabled={selectedOption !== null}
-                >
-                  <span className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-black font-bold">
-                    {String.fromCharCode(65 + index)}
-                  </span>
-                  {option}
-                </button>
-              ))}
+              {current.options.map((option, index) => {
+                const isBlurred =
+                  lifelinesUsed.fiftyFifty &&
+                  lifelinesUsed.blurredOptions.includes(index);
+                return (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerClick(option)}
+                    className={`w-3/4 text-left px-4 py-3 mb-2 text-lg rounded-md border font-bold transition-all flex items-center gap-3 ${
+                      optionColor[option] || "bg-gray-300"
+                    } ${isBlurred ? "filter blur-sm" : ""}`}
+                    disabled={selectedOption !== null || isBlurred}
+                  >
+                    <span className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-black font-bold">
+                      {String.fromCharCode(65 + index)}
+                    </span>
+                    {option}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -417,16 +580,53 @@ const QuizScreen = ({ playerName }) => {
           <Lifeline
             isVisible={isLifelineVisible}
             onFiftyFiftyClick={handleFiftyFifty}
+            onFlipQuestionClick={handleFlipQuestion}
             onClose={toggleLifeline}
           />
         )}
 
-        <button
-          onClick={handleQuit}
-          className="fixed bottom-10 right-10 rounded-lg bg-red-500 text-white text-2xl p-3 font-bold shadow-md"
-        >
-          Quit
-        </button>
+        <div>
+          {/* Candy Image */}
+          <div className="fixed bottom-24 right-10">
+            <img
+              src={candy}
+              className="w-24 h-24 cursor-pointer"
+              alt="Candy"
+              onClick={openModal}
+            />
+          </div>
+          <button
+            onClick={handleQuit}
+            className="fixed bottom-10 right-10 rounded-lg bg-red-500 text-white text-2xl p-3 font-bold shadow-md"
+          >
+            Quit
+          </button>
+
+          {/* Modal */}
+          {isModalOpen && (
+            <div
+              className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+              onClick={closeModal}
+            >
+              <div
+                className="bg-white p-6 rounded-lg shadow-lg relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Close Icon */}
+                <img
+                  src={closeIcon}
+                  className="w-6 h-6 cursor-pointer absolute top-2 right-2"
+                  alt="Close"
+                  onClick={closeModal}
+                />
+                {/* Modal Content */}
+                <div>
+                  <img src={pricepoll} className="w-[300px] h-[540px]" />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {showQuitPopup && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
